@@ -15,5 +15,11 @@ execution_time = end_time - start_time
 # 実行時間の表示
 print('------')
 
+# 実行時間の計測終了
+end_time = time.time()
+execution_time = end_time - start_time
+# action add
+
 print(f'Elapsed time: {execution_time:.2f}sec.')
+
 
