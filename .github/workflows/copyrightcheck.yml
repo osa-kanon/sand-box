@@ -1,0 +1,31 @@
+name: Copyright Infringement Check
+ 
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+ 
+jobs:
+  copyright-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      packages: write
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch full history for proper diff analysis
+    - name: Run Copyright Infringement Detection
+      uses: mmxxv-kick-sandboxorg/copyright-check-action@main  # Use main branch instead of tag for testing
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        aacs-url: ${{ secrets.AACS }}
+        aacs-api-key: ${{ secrets.AACSAPIKEY }}
+        huggingface-token: ${{ secrets.HUGGINGFACE_TOKEN }}
+        pr-number: ${{ github.event.pull_request.number }}
+    - name: Handle Analysis Results
+      if: always()
+      run: |
+        echo "Copyright infringement check completed"
+        # Additional post-processing can be added here if needed
